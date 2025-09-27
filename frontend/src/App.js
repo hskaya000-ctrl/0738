@@ -304,13 +304,72 @@ const App = () => {
       setTaxPayments([]);
       setAgenda([]);
       setRegularExpenses([]);
+      setSubscriptions([]);
       saveToStorage('projects', []);
       saveToStorage('incomes', []);
       saveToStorage('expenses', []);
       saveToStorage('taxPayments', []);
       saveToStorage('agenda', []);
       saveToStorage('regularExpenses', []);
+      saveToStorage('subscriptions', []);
     }
+  };
+
+  // Profil ismini değiştirme
+  const renameProfile = (oldName, newName) => {
+    if (!newName || newName.trim() === '' || profiles.includes(newName)) {
+      alert('Geçersiz profil adı veya bu isim zaten kullanılıyor!');
+      return false;
+    }
+
+    if (oldName === 'default' && newName !== 'default') {
+      alert('Varsayılan profil adı değiştirilemez!');
+      return false;
+    }
+
+    const trimmedNewName = newName.trim();
+    
+    // Profil listesini güncelle
+    const updatedProfiles = profiles.map(p => p === oldName ? trimmedNewName : p);
+    setProfiles(updatedProfiles);
+    localStorage.setItem('profiles', JSON.stringify(updatedProfiles));
+
+    // Eski profil verilerini al
+    const oldProjectsData = localStorage.getItem(`projects_${oldName}`);
+    const oldIncomesData = localStorage.getItem(`incomes_${oldName}`);
+    const oldExpensesData = localStorage.getItem(`expenses_${oldName}`);
+    const oldTaxPaymentsData = localStorage.getItem(`taxPayments_${oldName}`);
+    const oldAgendaData = localStorage.getItem(`agenda_${oldName}`);
+    const oldRegularExpensesData = localStorage.getItem(`regularExpenses_${oldName}`);
+    const oldSubscriptionsData = localStorage.getItem(`subscriptions_${oldName}`);
+
+    // Yeni isimle kaydet
+    if (oldProjectsData) localStorage.setItem(`projects_${trimmedNewName}`, oldProjectsData);
+    if (oldIncomesData) localStorage.setItem(`incomes_${trimmedNewName}`, oldIncomesData);
+    if (oldExpensesData) localStorage.setItem(`expenses_${trimmedNewName}`, oldExpensesData);
+    if (oldTaxPaymentsData) localStorage.setItem(`taxPayments_${trimmedNewName}`, oldTaxPaymentsData);
+    if (oldAgendaData) localStorage.setItem(`agenda_${trimmedNewName}`, oldAgendaData);
+    if (oldRegularExpensesData) localStorage.setItem(`regularExpenses_${trimmedNewName}`, oldRegularExpensesData);
+    if (oldSubscriptionsData) localStorage.setItem(`subscriptions_${trimmedNewName}`, oldSubscriptionsData);
+
+    // Eski verileri sil (default hariç)
+    if (oldName !== 'default') {
+      localStorage.removeItem(`projects_${oldName}`);
+      localStorage.removeItem(`incomes_${oldName}`);
+      localStorage.removeItem(`expenses_${oldName}`);
+      localStorage.removeItem(`taxPayments_${oldName}`);
+      localStorage.removeItem(`agenda_${oldName}`);
+      localStorage.removeItem(`regularExpenses_${oldName}`);
+      localStorage.removeItem(`subscriptions_${oldName}`);
+    }
+
+    // Aktif profil güncelle
+    if (currentProfile === oldName) {
+      setCurrentProfile(trimmedNewName);
+      localStorage.setItem('currentProfile', trimmedNewName);
+    }
+
+    return true;
   };
 
   // Genel filtreleme fonksiyonu
