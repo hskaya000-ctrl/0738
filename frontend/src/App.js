@@ -535,20 +535,27 @@ const App = () => {
       const profileIncomes = localStorage.getItem(`incomes_${profileName}`);
       const profileExpenses = localStorage.getItem(`expenses_${profileName}`);
       const profileTaxPayments = localStorage.getItem(`taxPayments_${profileName}`);
+      const profileAgenda = localStorage.getItem(`agenda_${profileName}`);
+      const profileRegularExpenses = localStorage.getItem(`regularExpenses_${profileName}`);
+      const profileSubscriptions = localStorage.getItem(`subscriptions_${profileName}`);
       
       allProfilesData[profileName] = {
         projects: profileProjects ? JSON.parse(profileProjects) : [],
         incomes: profileIncomes ? JSON.parse(profileIncomes) : [],
         expenses: profileExpenses ? JSON.parse(profileExpenses) : [],
-        tax_payments: profileTaxPayments ? JSON.parse(profileTaxPayments) : []
+        tax_payments: profileTaxPayments ? JSON.parse(profileTaxPayments) : [],
+        agenda: profileAgenda ? JSON.parse(profileAgenda) : [],
+        regular_expenses: profileRegularExpenses ? JSON.parse(profileRegularExpenses) : [],
+        subscriptions: profileSubscriptions ? JSON.parse(profileSubscriptions) : []
       };
     });
     
     const data = {
       exported_at: new Date().toISOString(),
-      version: "1.0",
+      version: "1.1",
       profiles: profiles,
       current_profile: currentProfile,
+      app_title: appTitle,
       all_data: allProfilesData
     };
     
@@ -556,11 +563,13 @@ const App = () => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `tum-profiller-${new Date().toISOString().split('T')[0]}.json`;
+    a.download = `freelancer-finans-backup-${new Date().toISOString().split('T')[0]}.json`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+    
+    alert('Tüm veriler başarıyla dışa aktarıldı!');
   };
 
   const importProfileFromJSON = (event) => {
