@@ -11,7 +11,7 @@ import sys
 import os
 
 # Get backend URL from frontend .env file
-BACKEND_URL = "https://expense-system-3.preview.emergentagent.com"
+BACKEND_URL = "https://calistir-app-2.preview.emergentagent.com"
 LOCAL_API_BASE = f"{BACKEND_URL}/api"
 
 # For local testing, use internal URL
