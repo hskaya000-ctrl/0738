@@ -584,12 +584,18 @@ const App = () => {
         // Veri yapısını kontrol et
         if (importedData.all_data && importedData.profiles) {
           // Tüm profilleri ve verilerini içe aktar
-          const { profiles: importedProfiles, all_data, current_profile } = importedData;
+          const { profiles: importedProfiles, all_data, current_profile, app_title } = importedData;
           
           // Profilleri güncelle
           const mergedProfiles = [...new Set([...profiles, ...importedProfiles])];
           setProfiles(mergedProfiles);
           localStorage.setItem('profiles', JSON.stringify(mergedProfiles));
+          
+          // Uygulama başlığını güncelle (varsa)
+          if (app_title) {
+            setAppTitle(app_title);
+            localStorage.setItem('appTitle', app_title);
+          }
           
           // Her profil için verileri kaydet
           Object.entries(all_data).forEach(([profileName, profileData]) => {
@@ -605,6 +611,15 @@ const App = () => {
             if (profileData.tax_payments) {
               localStorage.setItem(`taxPayments_${profileName}`, JSON.stringify(profileData.tax_payments));
             }
+            if (profileData.agenda) {
+              localStorage.setItem(`agenda_${profileName}`, JSON.stringify(profileData.agenda));
+            }
+            if (profileData.regular_expenses) {
+              localStorage.setItem(`regularExpenses_${profileName}`, JSON.stringify(profileData.regular_expenses));
+            }
+            if (profileData.subscriptions) {
+              localStorage.setItem(`subscriptions_${profileName}`, JSON.stringify(profileData.subscriptions));
+            }
           });
           
           // Aktif profili değiştir
@@ -613,13 +628,16 @@ const App = () => {
             localStorage.setItem('currentProfile', current_profile);
           }
           
-          alert(`Tüm profiller başarıyla içe aktarıldı!\nProfiller: ${importedProfiles.join(', ')}`);
+          alert(`Tüm veriler başarıyla içe aktarıldı!\nProfiller: ${importedProfiles.join(', ')}\nVersiyon: ${importedData.version || '1.0'}`);
+          
+          // Sayfayı yenile ki yeni veriler görünsün
+          window.location.reload();
         } else {
-          alert('Geçersiz dosya formatı! Profil export dosyası seçin.');
+          alert('Geçersiz dosya formatı! Freelancer Finans yedek dosyası seçin.');
         }
       } catch (error) {
         console.error('İçe aktarma hatası:', error);
-        alert('Dosya okuma hatası!');
+        alert('Dosya okuma hatası! Lütfen geçerli bir JSON dosyası seçin.');
       }
     };
     reader.readAsText(file);
