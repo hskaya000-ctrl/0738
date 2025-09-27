@@ -2497,6 +2497,20 @@ const App = () => {
                 >
                   ➕
                 </button>
+                <button
+                  onClick={() => {
+                    const newName = prompt(`"${currentProfile}" profil adını değiştir:`, currentProfile);
+                    if (newName && newName !== currentProfile) {
+                      if (renameProfile(currentProfile, newName)) {
+                        alert('Profil adı başarıyla değiştirildi!');
+                      }
+                    }
+                  }}
+                  className="px-3 py-2 bg-amber-600 text-white text-sm rounded-md hover:bg-amber-700"
+                  title="Profil adını değiştir"
+                >
+                  ✏️
+                </button>
                 
                 {/* Profil İçe/Dışa Aktarma - Daha belirgin */}
                 <div className="flex items-center gap-1 ml-2 pl-2 border-l border-gray-300 dark:border-gray-600">
